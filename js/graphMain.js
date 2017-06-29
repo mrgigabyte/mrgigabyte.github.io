@@ -38,7 +38,6 @@ $('document').ready(function(){
     function render_map(links_input) {
 
       var links = JSON.parse(JSON.stringify(links_input));
-        console.log(links)
       var nodes = d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
         // How should It be initialised here
       // Compute the distinct nodes from the links.
@@ -49,7 +48,6 @@ $('document').ready(function(){
               (nodes[link.target] = {name: link.target, links: link.link});
       });
       
-      console.log(nodes);
       nodes.clean(undefined);
     
       var force = d3.layout.force()
@@ -119,7 +117,6 @@ $('document').ready(function(){
               .attr("fill",function(d){
                   for(var x in nodesData)
                   {
-                      console.log(d.index);
                       if(d.index==0){return `none`;} 
                       if(d.index==51){return `none`;} 
                       if(nodesData[x].id==parseInt(d.index))
@@ -138,7 +135,6 @@ $('document').ready(function(){
                   }
               })
               .attr('r',nodeRadius)
-        console.log(node);
           
 
       // add the curvy lines
