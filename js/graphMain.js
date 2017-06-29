@@ -98,7 +98,7 @@ $('document').ready(function(){
           .attr("x", 12)
           .attr("dy", ".35em")
           .text(function(d) { return d.name; });
-:
+
       //    defining a defs container that keeps elements that will be used throughout the code (quite often)
       var defs = svg.append("svg:defs").selectAll('defs').data(nodeImagesArray(graphnodes))
                     .enter().append('pattern')
