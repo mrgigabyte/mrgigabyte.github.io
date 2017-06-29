@@ -1,8 +1,19 @@
+Array.prototype.clean = function(deleteValue) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] == deleteValue) {         
+      this.splice(i, 1);
+      i--;
+    }
+  }
+  return this;
+};
+
 $('document').ready(function(){
   // get the data
   d3.json("../data/graph.json", function(error, graphData) {
     var nodesData = graphData.nodes;
     var links = graphData.links;
+    
     var nodes = d3.range(links.length).map(function() { return {radius:  nodeRadius }; }); // Do not understand what happens here
 
     function grabNode(id) {
@@ -21,15 +32,15 @@ $('document').ready(function(){
           return link;
         }
       });
-
       return filtered_links;
     }
 
     function render_map(links_input) {
 
       var links = JSON.parse(JSON.stringify(links_input));
-      var nodes = {};               // How should It be initialised here
-
+        console.log(links)
+      var nodes = d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
+        // How should It be initialised here
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
           link.source = nodes[link.source] || 
@@ -37,8 +48,10 @@ $('document').ready(function(){
           link.target = nodes[link.target] || 
               (nodes[link.target] = {name: link.target, links: link.link});
       });
-
-
+      
+      console.log(nodes);
+      nodes.clean(undefined);
+    
       var force = d3.layout.force()
           .nodes(d3.values(nodes))
           .links(links)
@@ -47,6 +60,7 @@ $('document').ready(function(){
           .charge(charge)
           .on("tick", tick)
           .start();
+        d3.select(".graph").html("")
 
       var svg = d3.select(".graph").append("svg")
           .attr("width", graphwidth)
@@ -96,7 +110,8 @@ $('document').ready(function(){
                        .attr("xlink:href", `../Images/${d.img}`)
                        .attr('width',d.width)
                        .attr('height',d.height);});
-
+    
+    
           
           
       //    adding circular nodes and filling it with the image
@@ -104,14 +119,16 @@ $('document').ready(function(){
               .attr("fill",function(d){
                   for(var x in nodesData)
                   {
-                      
+                      console.log(d.index);
                       if(d.index==0){return `none`;} 
+                      if(d.index==51){return `none`;} 
                       if(nodesData[x].id==parseInt(d.index))
                       {
                           
                           for(var key in graphnodes){
                           
                               if(nodesData[x].type===key){
+                                  
                                   var m = `url(#${key.replace(/\s+/, "")})`
                                   return m;
                               }
@@ -121,6 +138,7 @@ $('document').ready(function(){
                   }
               })
               .attr('r',nodeRadius)
+        console.log(node);
           
 
       // add the curvy lines
@@ -151,12 +169,12 @@ $('document').ready(function(){
               return "translate(" + d.x+ "," + d.y + ")"; });
               
       }
-
-
-      function collide(alpha) {
+        
+        function collide(alpha) {
           var quadtree = d3.geom.quadtree(nodes);
           return function(d) {
-        
+
+              if(typeof d === 'object'){
               var r = d.radius + maxRadius + Math.max(padding, clusterPadding),
                   nx1 = d.x - r,
                   nx2 = d.x + r,
@@ -164,6 +182,7 @@ $('document').ready(function(){
                   ny2 = d.y + r;
 
               quadtree.visit(function(quad, x1, y1, x2, y2) {
+               
                  if (quad.point && (quad.point !== d)) {
                       var x = d.x - quad.point.x,
                           y = d.y - quad.point.y,
@@ -181,11 +200,12 @@ $('document').ready(function(){
               });
 
           };
+          }
       }
 
-
     }
-
+       
+    
     render_map(links);
 
     $('.filter_by').on('click', function(){
