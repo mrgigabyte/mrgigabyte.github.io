@@ -1,0 +1,71 @@
+@font-face{
+    font-family: "headerFont";
+    src:url("../../font/Helvetica-Oblique.otf");   
+}
+
+@font-face{
+    font-family: "contentFont";
+    src: url("../../font/GillSans.ttc");
+}
+
+@media only screen and (min-width: 1920px) {
+
+    body {
+        padding: 100px !important;
+    }
+}
+
+body{
+    padding-top: 0%;
+    padding-left: 6%;
+    padding-right: 6%;
+}
+
+.container{
+    width:100%;
+    height:100vh;
+    display: inline-flex;
+}
+
+
+.graph-content{
+    width: 80%;
+    display: inherit;
+}
+
+.graph{
+    width: 80%;
+    margin-left:auto;
+    margin-right: auto;
+}
+
+.left-panel{
+    height:100%;
+    width:220px;
+}
+
+.logo{
+    width:100%;
+    height: 217px;
+    background: url("../../Images/fovlogo.jpg");
+    background-repeat: no-repeat;
+    background-size: 120px 61px;
+    background-position: left center;
+}
+
+.left-panel-heading{
+    font-family: "headerFont";
+    font-size: 19px;
+    color: #00A99D;
+}
+
+.left-panel-content{
+margin-top:20px;
+  font-family : "contentFont";
+  font-size : 14px;
+  color : #606060;
+}
+.right-panel{
+    height:100%;
+    width:220px;
+}
