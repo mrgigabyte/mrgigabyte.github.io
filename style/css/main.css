@@ -4,6 +4,11 @@
 }
 
 @font-face{
+    font-family: "filterFont";
+    src:url("../../font/Helvetica-Bold.otf");   
+}
+
+@font-face{
     font-family: "contentFont";
     src: url("../../font/GillSans.ttc");
 }
@@ -78,7 +83,32 @@ margin-top:20px;
   font-size : 14px;
   color : #606060;
 }
+
 .right-panel{
     height:100%;
     width:220px;
+}
+
+
+
+button{
+    padding-bottom:10px;
+    text-align: left;
+    border: 0px;
+    background: none;
+    color: #00A99D;
+    font-size: 19px;
+    font-family: "filterFont";
+}
+
+.sub-filter{display:none;}
+
+.sub-filter.isActive{
+    
+    display: inline-flex;
+}
+
+
+.filter-img{
+    background:url(../../Images/Transport.png);
 }
