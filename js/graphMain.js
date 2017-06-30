@@ -209,5 +209,9 @@ $('document').ready(function(){
     $('.filter_by').on('click', function(){
       render_map(filter(links, $(this).data('filter_by')));
     })
+    
+    $('#all_nodes').on('click', function(){
+      render_map(links);
+    })
   });
 });
