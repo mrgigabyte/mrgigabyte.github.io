@@ -14,7 +14,7 @@ $('document').ready(function(){
     var nodesData = graphData.nodes;
     var links = graphData.links;
     
-    var nodes = d3.range(links.length).map(function() { return {radius:  nodeRadius }; }); // Do not understand what happens here
+    // var nodes = {}; // d3.range(links.length).map(function() { return {radius:  nodeRadius }; }); // Do not understand what happens here
 
     function grabNode(id) {
       return nodesData[id-1];
@@ -38,8 +38,8 @@ $('document').ready(function(){
     function render_map(links_input) {
 
       var links = JSON.parse(JSON.stringify(links_input));
-      var nodes = d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
-        // How should It be initialised here
+      var nodes =  {}; //d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
+
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
           link.source = nodes[link.source] || 
@@ -48,7 +48,7 @@ $('document').ready(function(){
               (nodes[link.target] = {name: link.target, links: link.link});
       });
       
-      nodes.clean(undefined);
+      // nodes.clean(undefined);
     
       var force = d3.layout.force()
           .nodes(d3.values(nodes))
@@ -93,8 +93,12 @@ $('document').ready(function(){
           .attr("class", "node")
           .call(force.drag);
           
-          
-          
+     // add the text 
+      node.append("text")
+          .attr("x", 12)
+          .attr("dy", ".35em")
+          .text(function(d) { return d.name; });
+
       //    defining a defs container that keeps elements that will be used throughout the code (quite often)
       var defs = svg.append("svg:defs").selectAll('defs').data(nodeImagesArray(graphnodes))
                     .enter().append('pattern')
@@ -117,9 +121,7 @@ $('document').ready(function(){
               .attr("fill",function(d){
                   for(var x in nodesData)
                   {
-                      if(d.index==0){return `none`;} 
-                      if(d.index==51){return `none`;} 
-                      if(nodesData[x].id==parseInt(d.index))
+                      if(nodesData[x].id==parseInt(d.name))
                       {
                           
                           for(var key in graphnodes){
@@ -223,6 +225,10 @@ function tick() {
 
     $('.filter_by').on('click', function(){
       render_map(filter(links, $(this).data('filter_by')));
+    })
+    
+    $('#all_nodes').on('click', function(){
+      render_map(links);
     })
   });
 });
