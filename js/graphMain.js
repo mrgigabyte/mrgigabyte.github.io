@@ -121,9 +121,7 @@ $('document').ready(function(){
               .attr("fill",function(d){
                   for(var x in nodesData)
                   {
-                      if(d.index==0){return `none`;} 
-                      if(d.index==51){return `none`;} 
-                      if(nodesData[x].id==parseInt(d.index))
+                      if(nodesData[x].id==parseInt(d.name))
                       {
                           
                           for(var key in graphnodes){
