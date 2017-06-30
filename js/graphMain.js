@@ -38,8 +38,8 @@ $('document').ready(function(){
     function render_map(links_input) {
 
       var links = JSON.parse(JSON.stringify(links_input));
-      var nodes =  {}; //d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
-
+      var nodes =  d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
+      console.log(nodes)
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
           link.source = nodes[link.source] || 
