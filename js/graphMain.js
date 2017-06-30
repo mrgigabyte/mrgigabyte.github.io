@@ -137,34 +137,51 @@ $('document').ready(function(){
               .attr('r',nodeRadius)
           
 
-      // add the curvy lines
-      function tick() {
-           node.each(collide(0.5))
-           path.attr('style',function(d){
-                   return `stroke:  ${stroke_color[d.link]}`
-           })
-              path.attr("d", function(d) {
-              var dx = d.target.x - d.source.x,
-                  dy = d.target.y - d.source.y,
-                  dr = Math.sqrt(dx * dx + dy * dy);
-              var a,b,c,e;
-              a = d.source.x;
-              b = d.source.y;
-              c = d.target.x;
-              e = d.target.y;
-              return "M" + 
-                  a + "," + 
-                  b + "A" + 
-                  dr + "," + dr + " 0 0,1 " + 
-                  c + "," + 
-                  e ;
-          });
+//      add the curvy lines
+function tick() {
+     node.each(collide(0.5))
+     path.attr('style',function(d){
+             return `stroke:  ${stroke_color[d.link]}`
+     })
+     path.attr("d", function(d) {
+        var dx = d.target.x - d.source.x,
+            dy = d.target.y - d.source.y,
+            dr = Math.sqrt(dx * dx + dy * dy),
+            a = d.source.x,
+            b = d.source.y,
+            c = d.target.x,
+            e = d.target.y;
+            
+        //      for self linking of nodes
+        if(a==c && b==e){
+                var xRotation = -45,
+                    largeArc=1,
+                    drx = 30,
+                    dry = 20,
+                    sweep=1;
+                    c +=1;
+                    e +=1;
+                    return "M" + a + "," + b + "A" + drx + "," + dry + " " + xRotation + "," + largeArc + "," + sweep + " " + c + "," + e;    
+                
+                }
+        return "M" + 
+            a + "," + 
+            b + "A" + 
+            dr + "," + dr + " 0 0,1 " + 
+            c + "," + 
+            e ;
+    });
 
-          node
-              .attr("transform", function(d) { 
-              return "translate(" + d.x+ "," + d.y + ")"; });
-              
-      }
+    node.attr("transform", function(d) { 
+        var width = document.getElementById("graph").offsetWidth, 
+            height =document.getElementById("graph").offsetHeight;
+        d.x = Math.max(nodeRadius, Math.min(width - nodeRadius, d.x));
+        d.y = Math.max(nodeRadius, Math.min((height-100) - nodeRadius, d.y));
+      
+  	    return "translate(" + d.x+ "," + d.y + ")"; 
+        });    
+    }
+
         
         function collide(alpha) {
           var quadtree = d3.geom.quadtree(nodes);

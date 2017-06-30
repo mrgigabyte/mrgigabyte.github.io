@@ -15,6 +15,13 @@
     }
 }
 
+@media only screen and (max-height: 800px) {
+
+    .container {
+        height: 112vh
+    }
+}
+
 body{
     padding-top: 0%;
     padding-left: 6%;
@@ -34,7 +41,7 @@ body{
 }
 
 .graph{
-    width: 80%;
+    width: 100%;
     margin-left:auto;
     margin-right: auto;
 }
@@ -53,6 +60,12 @@ body{
     background-position: left center;
 }
 
+.left-panel-top{
+       width:100%;
+    height: 217px;
+    background-size: 120px 61px;
+    background-position: left center; 
+}
 .left-panel-heading{
     font-family: "headerFont";
     font-size: 19px;
