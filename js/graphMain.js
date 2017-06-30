@@ -38,7 +38,7 @@ $('document').ready(function(){
     function render_map(links_input) {
 
       var links = JSON.parse(JSON.stringify(links_input));
-      var nodes =  {}; //d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
+      var nodes = {};
 
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
@@ -50,6 +50,11 @@ $('document').ready(function(){
       
       // nodes.clean(undefined);
     
+      // Adding radius key to nodes
+      Object.keys(nodes).forEach(function(node) {
+        nodes[node].radius = nodeRadius;
+      }) 
+
       var force = d3.layout.force()
           .nodes(d3.values(nodes))
           .links(links)
