@@ -7,11 +7,11 @@ $( document ).ready(function() {
                 var newheight = `${graphnodes[key]["filterheight"]}`;
                 var newwidth = `${graphnodes[key]["filterwidth"]}`;
                 document.getElementById(graphnodes[key]["id"]).setAttribute("style", `transition: 'background 1s'; background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
-                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: #C9C9C9;`);
+                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`);
     }
         
         
-        document.getElementById('all_nodes').setAttribute("style", `color: #00A99D;`);})
+        document.getElementById('all_nodes').setAttribute("style", `color: ${selectedfilter_text};`);})
 });
 function addfilter(){
   for(var key in graphnodes){

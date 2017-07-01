@@ -44,7 +44,8 @@ var stroke_color={
                     3:"#6AC2C3"  // gaps
                 };
 
-
+var fadeoutfilter_text = "#C9C9C9";  // when the filter option is not selected
+var selectedfilter_text = "#00A99D"; // when the filter type is selected
 var maxRadius = 80;     //sets the maxRadius
 var clusterPadding = 6; //sets clusterpadding
 var padding = 4.5;      //sets padding

@@ -66,6 +66,13 @@ button{
 }
 
 
+.filter-img{
+
+    background-size: 40px !important;
+    background-repeat: no-repeat !important;
+}
+
+
 .graph-content{
     position: relative;
     width: 80%;
@@ -130,9 +137,3 @@ button{
     display: inline-flex;
 }
 
-
-.filter-img{
-
-    background-size: 40px !important;
-    background-repeat: no-repeat !important;
-}

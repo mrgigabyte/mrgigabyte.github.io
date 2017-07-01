@@ -35,13 +35,13 @@ $('document').ready(function(){
             if(graphnodes[key]["id"] !== id){
                 var newheight = `${graphnodes[key]["filterheight"]}`;
                 var newwidth = `${graphnodes[key]["filterwidth"]}`;
-                document.getElementById(graphnodes[key]["id"]).setAttribute("style", `transition: 'background 1s'; background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
-                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: #C9C9C9;`);
-                document.getElementById('all_nodes').setAttribute("style", `color: #C9C9C9;`);
+                document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
+                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`);
+                document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`);
             }
         }
         document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`);
-        document.getElementById(id+"button").setAttribute("style", `color: #00A99D;`);
+        document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);
         
       var filtered_links = links.filter(function(link) {
         if ( grabNode(link.source).type === type || grabNode(link.target).type === type ){
