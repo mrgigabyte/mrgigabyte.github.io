@@ -9,6 +9,7 @@ Array.prototype.clean = function(deleteValue) {
 };
 
 $('document').ready(function(){
+    
   // get the data
   d3.json("../data/graph.json", function(error, graphData) {
     var nodesData = graphData.nodes;
@@ -25,8 +26,23 @@ $('document').ready(function(){
       // if links  source or target has the same type as we are looking for (2nd argument)
       //  put them in a separate array
       //  return that array
-      
-      
+
+        var height = `${graphnodes[type]["filterheight"]}`;
+        var width = `${graphnodes[type]["filterwidth"]}`;
+        var id=`${graphnodes[type]["id"]}`;
+        
+        for(var key in graphnodes){
+            if(graphnodes[key]["id"] !== id){
+                var newheight = `${graphnodes[key]["filterheight"]}`;
+                var newwidth = `${graphnodes[key]["filterwidth"]}`;
+                document.getElementById(graphnodes[key]["id"]).setAttribute("style", `transition: 'background 1s'; background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
+                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: #C9C9C9;`);
+                document.getElementById('all_nodes').setAttribute("style", `color: #C9C9C9;`);
+            }
+        }
+        document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`);
+        document.getElementById(id+"button").setAttribute("style", `color: #00A99D;`);
+        
       var filtered_links = links.filter(function(link) {
         if ( grabNode(link.source).type === type || grabNode(link.target).type === type ){
           return link;
@@ -38,8 +54,9 @@ $('document').ready(function(){
     function render_map(links_input) {
 
       var links = JSON.parse(JSON.stringify(links_input));
-      var nodes =  d3.range(links.length).map(function() { return {radius:  nodeRadius }; });
-      console.log(nodes)
+
+      var nodes = {};
+
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
           link.source = nodes[link.source] || 
@@ -50,6 +67,11 @@ $('document').ready(function(){
       
       // nodes.clean(undefined);
     
+      // Adding radius key to nodes
+      Object.keys(nodes).forEach(function(node) {
+        nodes[node].radius = nodeRadius;
+      }) 
+
       var force = d3.layout.force()
           .nodes(d3.values(nodes))
           .links(links)
@@ -197,6 +219,7 @@ function tick() {
                   ny2 = d.y + r;
 
               quadtree.visit(function(quad, x1, y1, x2, y2) {
+             
                
                  if (quad.point && (quad.point !== d)) {
                       var x = d.x - quad.point.x,

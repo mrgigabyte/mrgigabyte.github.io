@@ -1,21 +1,37 @@
 var graphwidth = "100%"; //sets the width of the graph <svg>
-var graphheight = 670; //sets the height of the graph <svg>
+var graphheight = "100%"; //sets the height of the graph <svg>
 
 //data for the nodes 
 var graphnodes = {
     "Transport":{
+                "id":'Transport xx',
+                "fadeout":"Transport_fadeout.png",
+                "filterwidth":"40px",
+                "filterheight":"50px",
                 "image":"Transport.png",
                 "width":"1", 
                 "height":"1"},
     "Urban Development":{
+                "id": "Urban Development",
+                "fadeout":"Urban_Development_fadeout.png",
+                "filterwidth":"60px",
+                "filterheight":"50px",
                 "image":"Urban_Development.png", 
                 "width":"1", 
                 "height":"1"},
     "Digital connectivity":{
+                "id": "Digital connectivity",
+                "fadeout":"Digital_Connectivity_fadeout.png",
+                "filterwidth":"60px",
+                "filterheight":"50px",
                 "image":"Digital_Connectivity.png",
                 "width":"0.7",
                 "height":"0.7"},
     "Trade":{
+                "id":'Trade xx',
+                "fadeout":"Trade_Industry_services_fadeout.png",
+                "filterwidth":"40px",
+                "filterheight":"50px",
                 "image":"Trade_Industry_services.png",
                 "width":"1",
                 "height":"1"}    
