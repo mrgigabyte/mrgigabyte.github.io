@@ -1,6 +1,6 @@
 $( document ).ready(function() {
     addfilter();
-    
+    addlegends();
     $('#all_nodes').click(function(){
         
         for(var key in graphnodes){
@@ -11,8 +11,10 @@ $( document ).ready(function() {
     }
         
         
-        document.getElementById('all_nodes').setAttribute("style", `color: ${selectedfilter_text};`);})
+    document.getElementById('all_nodes').setAttribute("style", `color: ${selectedfilter_text};`);})
 });
+
+
 function addfilter(){
   for(var key in graphnodes){
       var x = `../../Images/${graphnodes[key]["fadeout"]}`;
@@ -31,4 +33,14 @@ function addfilter(){
                                 </button>
                             </div><br/>`);
     
-}
+};
+
+
+function addlegends(){
+    for(var key in stroke){
+        var color = stroke[key]["color"];
+        var type = stroke[key]["name"];
+        $('.legends').append(`<div class="legends-key ${type.replace(/\s+/, "")}" id="legendskey">${type} </div>`)
+        document.styleSheets[0].insertRule(`.${type.replace(/\s+/, "")}::after { border-top: 1px solid ${color}; }`, 0);
+    }
+};

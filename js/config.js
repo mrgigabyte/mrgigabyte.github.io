@@ -38,10 +38,10 @@ var graphnodes = {
 };
 
 //data for the stroke color
-var stroke_color={
-                    1:"#FCCE75", // agreeing with
-                    2:"#D17D91", // conflicting with
-                    3:"#6AC2C3"  // gaps
+var stroke={
+                    1:{"color": "#FCCE75", width: "1.5px", "name":"Agreeing with"}, 
+                    2:{"color": "#D17D91", width: "1.5px", "name":"Conflicting with"}, 
+                    3:{"color": "#6AC2C3", width: "1.5px", "name":"Gaps"} 
                 };
 
 var fadeoutfilter_text = "#C9C9C9";  // when the filter option is not selected

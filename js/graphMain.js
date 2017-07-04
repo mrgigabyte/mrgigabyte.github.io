@@ -165,8 +165,12 @@ $('document').ready(function(){
 function tick() {
      node.each(collide(0.5))
      path.attr('style',function(d){
-             return `stroke:  ${stroke_color[d.link]}`
+             
+             return `stroke:  ${stroke[d.link]["color"]};stroke-width:  ${stroke[d.link]["width"]} `
      })
+//     path.attr('style',function(d){
+//             return `stroke-width:  ${stroke[d.link]["width"]}`
+//     })
      path.attr("d", function(d) {
         var dx = d.target.x - d.source.x,
             dy = d.target.y - d.source.y,
