@@ -8,6 +8,47 @@ Array.prototype.clean = function(deleteValue) {
   return this;
 };
 
+
+function clickcancel() {
+      var event = d3.dispatch('click', 'dblclick');
+      function cc(selection) {
+        console.log(selection);
+        var down,
+        tolerance = 5,
+        last,
+        wait = null;
+        // euclidean distance
+        function dist(a, b) {
+          return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
+        }
+        selection.on('mousedown', function() {
+          down = d3.mouse(document.body);
+          last = +new Date();
+        });
+        selection.on('mouseup', function() {
+          if (dist(down, d3.mouse(document.body)) > tolerance) {
+            return;
+          } else {
+            if (wait) {
+              window.clearTimeout(wait);
+              wait = null;
+              event.dblclick(d3.event);
+            } else {
+              wait = window.setTimeout((function(e) {
+                return function() {
+                  event.click(e);
+                  wait = null;
+                };
+              })(d3.event), 300);
+            }
+          }
+        });
+      };
+      return d3.rebind(cc, event, 'on');
+    }
+
+
+
 $('document').ready(function(){
     
   // get the data
@@ -126,19 +167,22 @@ $('document').ready(function(){
           }
           return nodeArr;
       }
+      
+      var cc = clickcancel();
 
       // define the nodes
       var node = svg.selectAll(".node")
           .data(force.nodes())    
           .enter().append("g")
           .attr("class", "node")
-          .call(force.drag);
-          
-     // add the text 
-      node.append("text")
-          .attr("x", 12)
-          .attr("dy", ".35em")
-          .text(function(d) { return d.name; });
+          .call(force.drag)
+          .call(cc);
+//          
+//     // add the text 
+//      node.append("text")
+//          .attr("x", 12)
+//          .attr("dy", ".35em")
+//          .text(function(d) { return d.name; });
      
       //    defining a defs container that keeps elements that will be used throughout the code (quite often)
       var defs = svg.append("svg:defs").selectAll('defs').data(nodeImagesArray(graphnodes))
@@ -179,6 +223,12 @@ $('document').ready(function(){
               })
               .attr('r',nodeRadius)
           
+        
+ 
+cc.on('dblclick', function(d) {
+       var me  = d3.select(d.srcElement);
+    console.log(me.data()[0].name)
+    })
 
 //      add the curvy lines
 function tick() {
