@@ -20,13 +20,26 @@ $('document').ready(function(){
     function grabNode(id) {
       return nodesData[id-1];
     }
-
+      
+      
+    nodesData.filter(function(val) {
+            if(links.findIndex(x => x.source == val.id || x.target == val.id)==-1)
+                {
+                
+                    links.push({"source": val.id, "target": val.id, "link":"orphan"})
+                }
+        })
+      
+    
     function filter(links, type) {
       // Iterate over links
       // if links  source or target has the same type as we are looking for (2nd argument)
       //  put them in a separate array
       //  return that array
 
+        
+        
+        // for filter layout
         var height = `${graphnodes[type]["filterheight"]}`;
         var width = `${graphnodes[type]["filterwidth"]}`;
         var id=`${graphnodes[type]["id"]}`;
@@ -57,6 +70,10 @@ $('document').ready(function(){
 
       var nodes = {};
 
+       
+        
+        
+        
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
           link.source = nodes[link.source] || 
@@ -65,12 +82,14 @@ $('document').ready(function(){
               (nodes[link.target] = {name: link.target, links: link.link});
       });
       
+        
+        
       // nodes.clean(undefined);
     
       // Adding radius key to nodes
-      Object.keys(nodes).forEach(function(node) {
-        nodes[node].radius = nodeRadius;
-      }) 
+//      Object.keys(nodes).forEach(function(node) {
+//        nodes[node].radius = nodeRadius;
+//      }) 
 
       var force = d3.layout.force()
           .nodes(d3.values(nodes))
@@ -120,7 +139,7 @@ $('document').ready(function(){
           .attr("x", 12)
           .attr("dy", ".35em")
           .text(function(d) { return d.name; });
-
+     
       //    defining a defs container that keeps elements that will be used throughout the code (quite often)
       var defs = svg.append("svg:defs").selectAll('defs').data(nodeImagesArray(graphnodes))
                     .enter().append('pattern')
@@ -165,7 +184,11 @@ $('document').ready(function(){
 function tick() {
      node.each(collide(0.5))
      path.attr('style',function(d){
-             
+         
+             if(d.link==="orphan"){
+                 return `stroke: none;`
+             }
+            
              return `stroke:  ${stroke[d.link]["color"]};stroke-width:  ${stroke[d.link]["width"]} `
      })
 //     path.attr('style',function(d){
@@ -221,10 +244,11 @@ function tick() {
                   nx2 = d.x + r,
                   ny1 = d.y - r,
                   ny2 = d.y + r;
+                 
 
               quadtree.visit(function(quad, x1, y1, x2, y2) {
              
-               
+             
                  if (quad.point && (quad.point !== d)) {
                       var x = d.x - quad.point.x,
                           y = d.y - quad.point.y,
