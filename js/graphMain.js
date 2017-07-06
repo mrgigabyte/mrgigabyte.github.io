@@ -151,11 +151,10 @@ $('document').ready(function(){
       var force = d3.layout.force()
           .nodes(d3.values(nodes))
           .links(links)
-          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight])
-          .linkDistance(linkdistance)
-          .charge(charge)
-          .on("tick", tick)
-          .start();
+          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(linkdistance)
+               .charge(charge)
+               .on("tick", tick)
+                .start();
         d3.select(".graph").html("")
 
       var svg = d3.select(".graph").append("svg")
