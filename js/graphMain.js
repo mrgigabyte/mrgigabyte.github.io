@@ -54,6 +54,7 @@ $('document').ready(function(){
   d3.json("../data/graph.json", function(error, graphData) {
     var nodesData = graphData.nodes;
     var links = graphData.links;
+    var queue = {};
     
     // var nodes = {}; // d3.range(links.length).map(function() { return {radius:  nodeRadius }; }); // Do not understand what happens here
 
@@ -81,44 +82,47 @@ $('document').ready(function(){
         
         // for filter layout
         if(graphnodes.hasOwnProperty(type)){
-        var height = `${graphnodes[type]["filterheight"]}`;
-        var width = `${graphnodes[type]["filterwidth"]}`;
-        var id=`${graphnodes[type]["id"]}`;
+            var height = `${graphnodes[type]["filterheight"]}`;
+            var width = `${graphnodes[type]["filterwidth"]}`;
+            var id=`${graphnodes[type]["id"]}`;
+            for(var key in graphnodes){
+                if(graphnodes[key]["id"] !== id){
+                    var newheight = `${graphnodes[key]["filterheight"]}`;
+                    var newwidth = `${graphnodes[key]["filterwidth"]}`;
+                    document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
+                    document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`);
+                    document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`);
+                }
+            }   
+            document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`);
+            document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);}
         
-        for(var key in graphnodes){
-            if(graphnodes[key]["id"] !== id){
-                var newheight = `${graphnodes[key]["filterheight"]}`;
-                var newwidth = `${graphnodes[key]["filterwidth"]}`;
-                document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
-                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`);
-                document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`);
-            }
-        }
-        document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`);
-        document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);}
         
+     // filter mechanism    
       var filtered_links = links.filter(function(link) {
            if(graphnodes.hasOwnProperty(type)){
-               
-        if ( grabNode(link.source).type === type || grabNode(link.target).type === type ){
-          return link;
-        }}
-        else{
-            var parentNode = parseInt(type.split("@")[0]);
-            if ( link.target.name == parentNode || link.source.name == parentNode){
+                if (grabNode(link.source).type === type || grabNode(link.target).type === type ){
+                    return link;
+                }
+            }
+            else{
                 
-                var filterlink = {source: link.source.name, target: link.target.name, link: link.link}
-          return filterlink;
-        }
-        }
+                // checks if its for the 3rd wireframe
+                var parentNode = parseInt(type.split("@")[0]);
+                if ( link.target.name == parentNode || link.source.name == parentNode){
+                    var filterlink = {source: link.source.name, target: link.target.name, link: link.link}
+                    return filterlink;
+                }
+            }
       });
         
-        filtered_links.forEach(function(link){
+      // quick hack for making the 3rd wireframe compatible    
+      filtered_links.forEach(function(link){
             if(typeof(link.source)==="object" && typeof(link.target)==="object"){
                 link.source = link.source.name;
                 link.target = link.target.name;
             }
-        })
+       })
         
       return filtered_links;
     }
@@ -147,15 +151,39 @@ $('document').ready(function(){
 //      Object.keys(nodes).forEach(function(node) {
 //        nodes[node].radius = nodeRadius;
 //      }) 
-
+      if(queue.id===3){
+          console.log('true')
       var force = d3.layout.force()
           .nodes(d3.values(nodes))
           .links(links)
-          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(linkdistance)
-               .charge(charge)
-               .on("tick", tick)
-                .start();
+          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(500)
+          
+          .charge(-1000)
+              
+              
+          .on("tick", tick)
+          .start();
         d3.select(".graph").html("")
+          
+          
+          
+      }
+        
+        else{
+            var force = d3.layout.force()
+          .nodes(d3.values(nodes))
+          .links(links)
+          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(linkdistance)
+          .charge(charge)
+          .on("tick", tick)
+          .start();
+        d3.select(".graph").html("")
+        
+        }
+        
+        
+     
+        
 
       var svg = d3.select(".graph").append("svg")
           .attr("width", graphwidth)
@@ -193,11 +221,21 @@ $('document').ready(function(){
           .call(force.drag)
           .call(cc);
 //          
-//     // add the text 
-//      node.append("text")
+     // add the text 
+        
+        if(queue.id===3){
+      node.append("svg:foreignObject")
+            .attr("width", 250)
+            .attr("height", 20)
+
 //          .attr("x", 12)
 //          .attr("dy", ".35em")
-//          .text(function(d) { return d.name; });
+          .html(function(d) { return grabNode(d.name).desc; });
+        
+        
+        
+        
+        }
      
       //    defining a defs container that keeps elements that will be used throughout the code (quite often)
       var defs = svg.append("svg:defs").selectAll('defs').data(nodeImagesArray(graphnodes))
@@ -212,8 +250,6 @@ $('document').ready(function(){
                        .attr("xlink:href", `../Images/${d.img}`)
                        .attr('width',d.width)
                        .attr('height',d.height);});
-    
-    
           
           
       //    adding circular nodes and filling it with the image
@@ -244,11 +280,19 @@ cc.on('dblclick', function(d) {
        var me  = d3.select(d.srcElement);
        var meNode = me.data()[0].name;
 //    linkdistance = 200;
+    queue.id = 3;
     render_map(filter(links, meNode.toString()+"@specific"));
     })
 
 //      add the curvy lines
 function tick() {
+    
+       if(queue.id===3){
+    node[0].x = document.getElementById("graph").offsetWidth/ 2;
+    node[0].y =  document.getElementById("graph").offsetHeight / 2;
+            queue ={};
+        }
+    
      node.each(collide(0.5))
      path.attr('style',function(d){
          
