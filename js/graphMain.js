@@ -8,7 +8,7 @@ Array.prototype.clean = function(deleteValue) {
   return this;
 };
 
-
+//for checking the number of clicks
 function clickcancel() {
       var event = d3.dispatch('click', 'dblclick');
       function cc(selection) {
@@ -54,15 +54,15 @@ $('document').ready(function(){
   d3.json("../data/graph.json", function(error, graphData) {
     var nodesData = graphData.nodes;
     var links = graphData.links;
-    var queue = {};
-    
+    var queue = {}; //a queue for making changes in the graph which are exclusively for the 3rd wireframe
+    var nodes={};
     // var nodes = {}; // d3.range(links.length).map(function() { return {radius:  nodeRadius }; }); // Do not understand what happens here
 
     function grabNode(id) {
       return nodesData[id-1];
     }
       
-      
+    //adding orphan nodes  
     nodesData.filter(function(val) {
             if(links.findIndex(x => x.source == val.id || x.target == val.id)==-1)
                 {
@@ -82,25 +82,29 @@ $('document').ready(function(){
         
         // for filter layout
         if(graphnodes.hasOwnProperty(type)){
-            var height = `${graphnodes[type]["filterheight"]}`;
-            var width = `${graphnodes[type]["filterwidth"]}`;
-            var id=`${graphnodes[type]["id"]}`;
+            var height =  `${graphnodes[type]["filterheight"]}`; //custom height for each filter-icon
+            var width  =  `${graphnodes[type]["filterwidth"]}`;  //custom width  for each filter-icon
+            var id     =  `${graphnodes[type]["id"]}`;
             for(var key in graphnodes){
+                //for unselected filter buttons
                 if(graphnodes[key]["id"] !== id){
                     var newheight = `${graphnodes[key]["filterheight"]}`;
-                    var newwidth = `${graphnodes[key]["filterwidth"]}`;
-                    document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
-                    document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`);
-                    document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`);
+                    var newwidth  = `${graphnodes[key]["filterwidth"]}` ;
+                    document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`); //setting the filter-icon
+                    document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`); //text for the filter
+                    document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`); //adding "All" param in the filters.
                 }
             }   
+            
+            //for the selected filter type
             document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`);
-            document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);}
+            document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);
+        }
         
         
      // filter mechanism    
       var filtered_links = links.filter(function(link) {
-           if(graphnodes.hasOwnProperty(type)){
+           if(graphnodes.hasOwnProperty(type)){ // checks if the filter function was called via the filter panel or not
                 if (grabNode(link.source).type === type || grabNode(link.target).type === type ){
                     return link;
                 }
@@ -109,6 +113,7 @@ $('document').ready(function(){
                 
                 // checks if its for the 3rd wireframe
                 var parentNode = parseInt(type.split("@")[0]);
+                console.log(queue)
                 if ( link.target.name == parentNode || link.source.name == parentNode){
                     var filterlink = {source: link.source.name, target: link.target.name, link: link.link}
                     return filterlink;
@@ -116,7 +121,7 @@ $('document').ready(function(){
             }
       });
         
-      // quick hack for making the 3rd wireframe compatible    
+      // quick hack for making the 3rd wireframe compatible. since target and source have objects instead of a 'single' value.    
       filtered_links.forEach(function(link){
             if(typeof(link.source)==="object" && typeof(link.target)==="object"){
                 link.source = link.source.name;
@@ -124,72 +129,73 @@ $('document').ready(function(){
             }
        })
         
-      return filtered_links;
+      return filtered_links; //returning the filtered_links. I guess the name explains :P
     }
 
     function render_map(links_input) {
 
-      var links = JSON.parse(JSON.stringify(links_input));
+      var links = JSON.parse(JSON.stringify(links_input)); 
 
       var nodes = {};
 
         
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
-          link.source = nodes[link.source] || 
-              (nodes[link.source] = {name: link.source, links: link.link});
-          link.target = nodes[link.target] || 
-              (nodes[link.target] = {name: link.target, links: link.link});
+          link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, links: link.link});
+          link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, links: link.link});
       });
-      
+      console.log(nodes)
+    var newnodes = nodes;
         
         
-      // nodes.clean(undefined);
     
       // Adding radius key to nodes
 //      Object.keys(nodes).forEach(function(node) {
 //        nodes[node].radius = nodeRadius;
 //      }) 
+        
+       //checks if the 3rd wireframe is active
       if(queue.id===3){
-          console.log('true')
-      var force = d3.layout.force()
-          .nodes(d3.values(nodes))
-          .links(links)
-          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(500)
-          .charge(-1000)
-          .on("tick", tick)
-          .start();
-        d3.select(".graph").html("")
-          
-          
+          console.log( newnodes);
+            var force = d3.layout.force()
+                          .nodes(d3.values(nodes))
+                          .links(links)
+                          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(200)
+                          .charge(-1000)
+                          
+                          .on("tick", tick)
+                          .start();
+            
           
       }
         
-        else{
+      else{
             var force = d3.layout.force()
-          .nodes(d3.values(nodes))
-          .links(links)
-          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(linkdistance)
-          .charge(charge)
-          .on("tick", tick)
-          .start();
-        d3.select(".graph").html("")
-        
-        }
-        
+                          .nodes(d3.values(nodes))
+                          .links(links)
+                          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(linkdistance)
+                          .charge(charge)
+                          .on("tick", tick)
+                          .start();
 
+      }
+      
+        
+      d3.select(".graph").html("") //sets the html of as empty  
+    
       var svg = d3.select(".graph").append("svg")
-          .attr("width", graphwidth)
-          .attr("height", graphheight);
+                  .attr("width", graphwidth)
+                  .attr("height", graphheight);
+        
 
-      // add the links and the arrows
+      // add the links a.k.a path
       var path = svg.append("svg:g").selectAll("path")
-          .data(force.links())
-          .enter().append("svg:path")
-          .attr("class", "link")
-          .attr("marker-end", "url(#end)");
+                    .data(force.links())
+                    .enter().append("svg:path")
+                    .attr("class", "link")
+                    .attr("marker-end", "url(#end)");
           
-          
+      // a function for generating run-time data from the config. (used for the node-images)      
       var nodeImagesArray = function(m){
           var nodeArr = [];
           for(var key in m){
@@ -204,6 +210,7 @@ $('document').ready(function(){
           return nodeArr;
       }
       
+      //initialises the 'click' function for the respective nodes
       var cc = clickcancel();
 
       // define the nodes
@@ -211,19 +218,27 @@ $('document').ready(function(){
           .data(force.nodes())    
           .enter().append("g")
           .attr("class", "node")
+        
           .call(force.drag)
           .call(cc);
 //          
      // add the text 
         
-        if(queue.id===3){
-      node.append("svg:foreignObject")
-            .attr("width", 250)
-            .attr("height", 20)
-            .html(function(d) { return grabNode(d.name).desc; });
+          
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
         
-        
-        }
+//        if(queue.id===3){
+//      node.append("svg:foreignObject")
+//            .attr("width", 250)
+//            .attr("height", 20)
+//            .html(function(d) { return grabNode(d.name).desc; });
+//        
+//        
+//        }
+    
      
       //    defining a defs container that keeps elements that will be used throughout the code (quite often)
       var defs = svg.append("svg:defs").selectAll('defs').data(nodeImagesArray(graphnodes))
@@ -241,7 +256,7 @@ $('document').ready(function(){
           
           
       //    adding circular nodes and filling it with the image
-          node.append("circle")
+      node.append("circle")
               .attr("fill",function(d){
                   for(var x in nodesData)
                   {
@@ -268,23 +283,41 @@ $('document').ready(function(){
             svg.on("click", function() {
                         if(queue.id===3){
                                 queue = {}; 
-                                $('.right-panel').css('display','block');
+                                console.log(queue)
+                                $('.right-panel').removeClass('isDisabled')
                                 render_map(graphData.links);
                              
-                        }
-            });
+                            }
+                    });
         }
  
+        
+        // checks for double click
         cc.on('dblclick', function(d) {
             var me  = d3.select(d.srcElement);
             var meNode = me.data()[0].name;
             queue.id = 3;
-            $('.right-panel').css('display','none');
+            queue.pnode = parseInt(meNode);
+            console.log(queue,queue.pnode)
+            $('.right-panel').addClass('isDisabled');
             render_map(filter(links, meNode.toString()+"@specific"));
         })
 
-//      add the curvy lines
+        
 function tick() {
+    
+//    if(queue.id === 3){
+//        
+////        if(!nodes[parseInt(queue.pnode)]){
+////            console.log('okay')
+////            var meNode = queue.pnode
+////            nodes = {};
+////            render_map(filter(links, meNode.toString()+"@specific"));
+////        }
+//        console.log(newnodes)
+//        newnodes[parseInt(queue.pnode)].x = document.getElementById("graph").offsetWidth/ 2;
+//        newnodes[parseInt(queue.pnode)].y = document.getElementById("graph").offsetHeight / 2;
+//    }
 
      node.each(collide(0.5))
      path.attr('style',function(d){
@@ -322,7 +355,62 @@ function tick() {
             dr + "," + dr + " 0 0,1 " + 
             c + "," + 
             e ;
-    });
+    })  .on("mouseover", function(d){if(queue.id===3){
+            var reqddesc = [d.target.name,d.source.name]
+            node.append("svg:foreignObject")
+                .attr("width", 250)
+                .attr("height", 20)
+                .html(function(d) {
+                    for(var m in reqddesc){
+                        if(d.name===reqddesc[m]){
+                            return grabNode(d.name).desc;
+                            
+                        }
+                        
+                    }
+                
+                })
+                d3.selectAll("circle")
+                  .attr('fill',function(d){ 
+                        if(reqddesc.indexOf(d.name)!== -1){
+                            for(var x in nodesData){
+                                if(nodesData[x].id==parseInt(d.name)){
+                          
+                                    for(var key in graphnodes){
+                          
+                                            if(nodesData[x].type===key){
+                                  
+                                                var m = `url(#${key.replace(/\s+/, "")})`
+                                                return m;
+                                            }
+                          
+                                        }
+                                    }
+                                }
+                            }
+                        else{
+                            return `none`;
+                        }
+                  })
+                 d3.selectAll("path")
+                  .attr('style',function(d){ 
+                        if(reqddesc.indexOf(d.source.name)!== -1){
+        
+                            return `stroke:  ${stroke[d.link]["color"]}; stroke-width:  ${stroke[d.link]["width"]} `
+                            }
+                        else{
+                            return `stroke: none;`
+                        }
+                  })
+         
+                }});
+//        .on("mouseout", function(){if(queue.id===3){
+//         console.log('true')
+//            node.append("svg:foreignObject")
+//                .attr("width", 250)
+//                .attr("height", 20)
+//                .html("")
+//                }});
 
     node.attr("transform", function(d) { 
         var width = document.getElementById("graph").offsetWidth, 

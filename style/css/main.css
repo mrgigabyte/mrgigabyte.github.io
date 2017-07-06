@@ -175,8 +175,13 @@ button{
 }
 
 .right-panel{
+    display: block;
     height:100%;
     width:220px;
+}
+
+.right-panel.isDisabled{
+    display:none !important;
 }
 
 .sub-filter{
