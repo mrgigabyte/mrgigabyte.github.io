@@ -134,7 +134,6 @@ $('document').ready(function(){
       var nodes = {};
 
         
-        
       // Compute the distinct nodes from the links.
       links.forEach(function(link) {
           link.source = nodes[link.source] || 
@@ -157,10 +156,7 @@ $('document').ready(function(){
           .nodes(d3.values(nodes))
           .links(links)
           .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(500)
-          
           .charge(-1000)
-              
-              
           .on("tick", tick)
           .start();
         d3.select(".graph").html("")
@@ -180,9 +176,6 @@ $('document').ready(function(){
         d3.select(".graph").html("")
         
         }
-        
-        
-     
         
 
       var svg = d3.select(".graph").append("svg")
@@ -227,12 +220,7 @@ $('document').ready(function(){
       node.append("svg:foreignObject")
             .attr("width", 250)
             .attr("height", 20)
-
-//          .attr("x", 12)
-//          .attr("dy", ".35em")
-          .html(function(d) { return grabNode(d.name).desc; });
-        
-        
+            .html(function(d) { return grabNode(d.name).desc; });
         
         
         }
@@ -273,26 +261,31 @@ $('document').ready(function(){
                   }
               })
               .attr('r',nodeRadius)
-          
         
+        
+        // for clicking in the background of the third wireframe to go back to wireframe1
+        if(queue.id===3){  
+            svg.on("click", function() {
+                        if(queue.id===3){
+                                queue = {}; 
+                                $('.right-panel').css('display','block');
+                                render_map(graphData.links);
+                             
+                        }
+            });
+        }
  
-cc.on('dblclick', function(d) {
-       var me  = d3.select(d.srcElement);
-       var meNode = me.data()[0].name;
-//    linkdistance = 200;
-    queue.id = 3;
-    render_map(filter(links, meNode.toString()+"@specific"));
-    })
+        cc.on('dblclick', function(d) {
+            var me  = d3.select(d.srcElement);
+            var meNode = me.data()[0].name;
+            queue.id = 3;
+            $('.right-panel').css('display','none');
+            render_map(filter(links, meNode.toString()+"@specific"));
+        })
 
 //      add the curvy lines
 function tick() {
-    
-       if(queue.id===3){
-    node[0].x = document.getElementById("graph").offsetWidth/ 2;
-    node[0].y =  document.getElementById("graph").offsetHeight / 2;
-            queue ={};
-        }
-    
+
      node.each(collide(0.5))
      path.attr('style',function(d){
          
@@ -300,11 +293,8 @@ function tick() {
                  return `stroke: none;`
              }
             
-             return `stroke:  ${stroke[d.link]["color"]};stroke-width:  ${stroke[d.link]["width"]} `
+             return `stroke:  ${stroke[d.link]["color"]}; stroke-width:  ${stroke[d.link]["width"]} `
      })
-//     path.attr('style',function(d){
-//             return `stroke-width:  ${stroke[d.link]["width"]}`
-//     })
      path.attr("d", function(d) {
         var dx = d.target.x - d.source.x,
             dy = d.target.y - d.source.y,
@@ -386,10 +376,12 @@ function tick() {
     render_map(links);
 
     $('.filter_by').on('click', function(){
+        queue = {};
       render_map(filter(links, $(this).data('filter_by')));
     })
     
     $('#all_nodes').on('click', function(){
+        queue={};
       render_map(links);
     })
   });
