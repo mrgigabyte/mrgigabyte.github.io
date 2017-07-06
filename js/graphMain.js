@@ -12,7 +12,6 @@ Array.prototype.clean = function(deleteValue) {
 function clickcancel() {
       var event = d3.dispatch('click', 'dblclick');
       function cc(selection) {
-        console.log(selection);
         var down,
         tolerance = 5,
         last,
@@ -81,6 +80,7 @@ $('document').ready(function(){
         
         
         // for filter layout
+        if(graphnodes.hasOwnProperty(type)){
         var height = `${graphnodes[type]["filterheight"]}`;
         var width = `${graphnodes[type]["filterwidth"]}`;
         var id=`${graphnodes[type]["id"]}`;
@@ -95,13 +95,31 @@ $('document').ready(function(){
             }
         }
         document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`);
-        document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);
+        document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);}
         
       var filtered_links = links.filter(function(link) {
+           if(graphnodes.hasOwnProperty(type)){
+               
         if ( grabNode(link.source).type === type || grabNode(link.target).type === type ){
           return link;
+        }}
+        else{
+            var parentNode = parseInt(type.split("@")[0]);
+            if ( link.target.name == parentNode || link.source.name == parentNode){
+                
+                var filterlink = {source: link.source.name, target: link.target.name, link: link.link}
+          return filterlink;
+        }
         }
       });
+        
+        filtered_links.forEach(function(link){
+            if(typeof(link.source)==="object" && typeof(link.target)==="object"){
+                link.source = link.source.name;
+                link.target = link.target.name;
+            }
+        })
+        
       return filtered_links;
     }
 
@@ -111,8 +129,6 @@ $('document').ready(function(){
 
       var nodes = {};
 
-       
-        
         
         
       // Compute the distinct nodes from the links.
@@ -227,7 +243,9 @@ $('document').ready(function(){
  
 cc.on('dblclick', function(d) {
        var me  = d3.select(d.srcElement);
-    console.log(me.data()[0].name)
+       var meNode = me.data()[0].name;
+//    linkdistance = 200;
+    render_map(filter(links, meNode.toString()+"@specific"));
     })
 
 //      add the curvy lines
