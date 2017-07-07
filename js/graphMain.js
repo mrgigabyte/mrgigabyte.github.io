@@ -384,10 +384,10 @@ function tick() {
             $('.left-panel-linkdiscpt').html(d.desc)    
             var x;
             if(d.target.name === d.source.name){
-                x = `${grabNode(d.target.name).desc}`;
+                x = `<strong>${grabNode(d.target.name).label}: </strong>${grabNode(d.target.name).desc}`;
             }
             else{
-               x = `${grabNode(d.target.name).desc}<br/><br/>${grabNode(d.source.name).desc}`;
+               x = `<strong>${grabNode(d.target.name).label}: </strong>${grabNode(d.target.name).desc}<br/><br/><strong>${grabNode(d.source.name).label}: </strong>${grabNode(d.source.name).desc}`;
             }
             $('.bottom-description').html(x)
 //            var reqddesc = [d.target.name,d.source.name]
@@ -445,6 +445,19 @@ function tick() {
                  }
                  return stroke[d.link].width
             })
+         var reqddesc = [d.target.name,d.source.name]
+         d3.selectAll('text')
+             .attr("dx", 12)
+             .attr("dy", ".35em")
+             .text(function(d) { 
+                 for(var m in reqddesc){
+                    if(d.name===reqddesc[m]){
+                        return grabNode(d.name).label;
+                            
+                    }
+                        
+                  } 
+               });
          d3.select(this).transition()
            .duration(750)
            .style('stroke-width', function(d){

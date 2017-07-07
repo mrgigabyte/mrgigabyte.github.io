@@ -41,12 +41,12 @@
         height: 20% !important;
 
     }
-}
-
-@media only screen and (max-height: 800px) {
 
     .container {
         height: 112vh
+    }
+    .graph{
+        height:100% !important;
     }
 }
 

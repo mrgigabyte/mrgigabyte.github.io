@@ -51,4 +51,4 @@ var clusterPadding = 6; //sets clusterpadding
 var padding = 4.5;      //sets padding
 var nodeRadius=20;      //sets radius of the circular node
 var linkdistance = 70; //sets linkdistance in between the nodes
-var charge = -200;      //sets the closeness of the different clusters, more negative = less closeness
+var charge = -250;      //sets the closeness of the different clusters, more negative = less closeness
