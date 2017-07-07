@@ -227,10 +227,8 @@ $('document').ready(function(){
      // add the text 
 //        
 //          
-  node.append("text")
-      .attr("dx", 12)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name });
+  node.append("text")   
+
         
 //        if(queue.id===3){
 //      node.append("svg:foreignObject")
@@ -284,14 +282,18 @@ $('document').ready(function(){
         if(queue.id===3){  
             $('svg').dblclick(function(){
                                 if(queue.id===3){
+                                     $('.right-panel').fadeIn('slow');
                                     $('.graph-content').removeClass('decreaseheight')
                                     $('.bottom-description').addClass('isDisabled')
-                                    $('.left-panel-heading').removeClass('isDisabled')
-                                    $('.left-panel-content').removeClass('isDisabled')
+                                    $('.left-panel-content').fadeIn('slow');
+                                    $('.left-panel-heading').fadeIn('slow');
+//                                      $('.right-panel').removeClass('isDisabled')
+//                                    $('.left-panel-heading').removeClass('isDisabled')
+//                                    $('.left-panel-content').removeClass('isDisabled')
                                     $('.left-panel-linkdiscpt').addClass('isDisabled')
                                     queue = {}; 
                                     console.log(queue)
-                                    $('.right-panel').removeClass('isDisabled')
+                                  
                                     render_map(graphData.links);   
                                     for(var key in graphnodes){
                                         var newheight = `${graphnodes[key]["filterheight"]}`;
@@ -307,13 +309,18 @@ $('document').ready(function(){
         
         // checks for double click
         cc.on('dblclick', function(d) {
+            $('.right-panel').fadeOut('slow');
+            $('.left-panel-content ').fadeOut('slow')
+            $('.left-panel-heading').fadeOut('slow')
+            $('.left-panel-linkdiscpt').fadeIn('slow')
             $('.bottom-description').html("")
             $('.left-panel-linkdiscpt').html("")
             $('.graph-content').addClass('decreaseheight')
             $('.bottom-description').removeClass('isDisabled')
-            $('.left-panel-heading').addClass('isDisabled')
-            $('.left-panel-content').addClass('isDisabled')
-            $('.left-panel-linkdiscpt').removeClass('isDisabled')
+//              $('.right-panel').addClass('isDisabled');
+//            $('.left-panel-heading').addClass('isDisabled')
+//            $('.left-panel-content').addClass('isDisabled')
+//            $('.left-panel-linkdiscpt').removeClass('isDisabled')
             var me  = d3.select(d.srcElement);
             var meNode = me.data()[0].name;
             console.log(me.data()[0].links)
@@ -324,7 +331,7 @@ $('document').ready(function(){
             queue.id = 3;
             queue.pnode = parseInt(meNode);
             console.log(queue,queue.pnode)
-            $('.right-panel').addClass('isDisabled');
+            
             render_map(filter(links, meNode.toString()+"@specific"));
         })
 
@@ -381,6 +388,10 @@ function tick() {
             c + "," + 
             e ;
     })  .on("mouseenter", function(d){if(queue.id===3){
+            $('.left-panel-linkdiscpt').fadeOut('fast', function() {
+                $('.left-panel-linkdiscpt').html(d.desc);
+                $('.left-panel-linkdiscpt').fadeIn('slow');
+            })
             $('.left-panel-linkdiscpt').html(d.desc)    
             var x;
             if(d.target.name === d.source.name){
@@ -389,7 +400,11 @@ function tick() {
             else{
                x = `<strong>${grabNode(d.target.name).label}: </strong>${grabNode(d.target.name).desc}<br/><br/><strong>${grabNode(d.source.name).label}: </strong>${grabNode(d.source.name).desc}`;
             }
-            $('.bottom-description').html(x)
+            $('.bottom-description').fadeOut('fast', function() {
+                $('.bottom-description').html(x);
+                $('.bottom-description').fadeIn('slow');
+            })
+//            $('.bottom-description').html(x)
 //            var reqddesc = [d.target.name,d.source.name]
 //            node.append("svg:foreignObject")
 //                .attr("width", 250)
@@ -464,21 +479,9 @@ function tick() {
                                         
                                          return stroke[d.link].isfocusedWidth
                                    }) 
-//         
-//                }});
-//        .on("mouseout", function(){if(queue.id===3){
-//         console.log('true')
-//            node.append("svg:foreignObject")
-//                .attr("width", 250)
-//                .attr("height", 20)
-//                .html("")
+
                 }})
-//    .on("mouseout", function(){if(queue.id===3){
-//         if(queue.id===3){
-//            $('.left-panel-linkdiscpt').html("")
-//            d3.select(this).transition()
-//      .duration(750)
-//      .style('stroke-width', function(d){return stroke[d.link].width}) }}})  
+
 
     node.attr("transform", function(d) { 
         var width = document.getElementById("graph").offsetWidth, 

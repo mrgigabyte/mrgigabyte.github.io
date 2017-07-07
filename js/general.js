@@ -38,7 +38,7 @@ function basic(){
                 document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${selectedfilter_text};`);
     }
         
-    $('#all_nodes').addClass('isDisabled'); 
+    $('#all_nodes').fadeOut('slow') 
     })
     
 }
