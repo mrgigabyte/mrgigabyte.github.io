@@ -186,8 +186,8 @@ $('document').ready(function(){
       var svg = d3.select(".graph").append("svg")
                   .attr("width", graphwidth)
                   .attr("height", graphheight);
-        
-
+                  
+                  
       // add the links a.k.a path
       var path = svg.append("svg:g").selectAll("path")
                     .data(force.links())
@@ -280,20 +280,24 @@ $('document').ready(function(){
         
         // for clicking in the background of the third wireframe to go back to wireframe1
         if(queue.id===3){  
-            svg.on("click", function() {
-                        if(queue.id===3){
-                                queue = {}; 
-                                console.log(queue)
-                                $('.right-panel').removeClass('isDisabled')
-                                render_map(graphData.links);
+            $('svg').dblclick(function(){
+                                if(queue.id===3){
+                                    $('.left-panel-content').removeClass('isDisabled')
+                                    $('.left-panel-linkdiscpt').addClass('isDisabled')
+                                    queue = {}; 
+                                    console.log(queue)
+                                    $('.right-panel').removeClass('isDisabled')
+                                    render_map(graphData.links);
                              
-                            }
-                    });
+                                }
+                            })
         }
  
         
         // checks for double click
         cc.on('dblclick', function(d) {
+            $('.left-panel-content').addClass('isDisabled')
+            $('.left-panel-linkdiscpt').removeClass('isDisabled')
             var me  = d3.select(d.srcElement);
             var meNode = me.data()[0].name;
             queue.id = 3;
@@ -355,62 +359,72 @@ function tick() {
             dr + "," + dr + " 0 0,1 " + 
             c + "," + 
             e ;
-    })  .on("mouseover", function(d){if(queue.id===3){
-            var reqddesc = [d.target.name,d.source.name]
-            node.append("svg:foreignObject")
-                .attr("width", 250)
-                .attr("height", 20)
-                .html(function(d) {
-                    for(var m in reqddesc){
-                        if(d.name===reqddesc[m]){
-                            return grabNode(d.name).desc;
-                            
-                        }
-                        
-                    }
-                
-                })
-                d3.selectAll("circle")
-                  .attr('fill',function(d){ 
-                        if(reqddesc.indexOf(d.name)!== -1){
-                            for(var x in nodesData){
-                                if(nodesData[x].id==parseInt(d.name)){
-                          
-                                    for(var key in graphnodes){
-                          
-                                            if(nodesData[x].type===key){
-                                  
-                                                var m = `url(#${key.replace(/\s+/, "")})`
-                                                return m;
-                                            }
-                          
-                                        }
-                                    }
-                                }
-                            }
-                        else{
-                            return `none`;
-                        }
-                  })
-                 d3.selectAll("path")
-                  .attr('style',function(d){ 
-                        if(reqddesc.indexOf(d.source.name)!== -1){
-        
-                            return `stroke:  ${stroke[d.link]["color"]}; stroke-width:  ${stroke[d.link]["width"]} `
-                            }
-                        else{
-                            return `stroke: none;`
-                        }
-                  })
-         
-                }});
+    })  .on("mouseenter", function(d){if(queue.id===3){
+            $('.left-panel-linkdiscpt').html(d.desc)    
+//            var reqddesc = [d.target.name,d.source.name]
+//            node.append("svg:foreignObject")
+//                .attr("width", 250)
+//                .attr("height", 20)
+//                .html(function(d) {
+//                    for(var m in reqddesc){
+//                        if(d.name===reqddesc[m]){
+//                            return grabNode(d.name).desc;
+//                            
+//                        }
+//                        
+//                    }
+//                
+//                })
+//                d3.selectAll("circle")
+//                  .attr('fill',function(d){ 
+//                        if(reqddesc.indexOf(d.name)!== -1){
+//                            for(var x in nodesData){
+//                                if(nodesData[x].id==parseInt(d.name)){
+//                          
+//                                    for(var key in graphnodes){
+//                          
+//                                            if(nodesData[x].type===key){
+//                                  
+//                                                var m = `url(#${key.replace(/\s+/, "")})`
+//                                                return m;
+//                                            }
+//                          
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        else{
+//                            return `none`;
+//                        }
+//                  })
+//                 d3.selectAll("path")
+//                  .attr('style',function(d){ 
+//                        if(reqddesc.indexOf(d.source.name)!== -1){
+//        
+//                            return `stroke:  ${stroke[d.link]["color"]}; stroke-width:  3px `
+//                            }
+//                        else{
+//                            return `stroke: none;`
+//                        }
+//                  })
+         d3.select(this).transition()
+      .duration(750)
+      .style('stroke-width', 6) 
+//         
+//                }});
 //        .on("mouseout", function(){if(queue.id===3){
 //         console.log('true')
 //            node.append("svg:foreignObject")
 //                .attr("width", 250)
 //                .attr("height", 20)
 //                .html("")
-//                }});
+                }})
+    .on("mouseout", function(){if(queue.id===3){
+         if(queue.id===3){
+            $('.left-panel-linkdiscpt').html("")
+            d3.select(this).transition()
+      .duration(750)
+      .style('stroke-width', function(d){return stroke[d.link].width}) }}})  
 
     node.attr("transform", function(d) { 
         var width = document.getElementById("graph").offsetWidth, 

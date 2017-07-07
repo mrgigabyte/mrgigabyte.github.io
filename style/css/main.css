@@ -129,6 +129,22 @@ button{
     margin-bottom: 20%;
 }
 
+.isDisabled{
+    display: none;
+}
+
+.isActive{
+    display: block;
+}
+
+.left-panel-linkdiscpt{
+    margin-top:20px;
+    font-family : "contentFont";
+    font-size : 14px;
+    color : #606060;
+    margin-bottom: 20%;
+}
+
 .legends{
     height:10%; 
     padding-top: 10%;
