@@ -19,8 +19,8 @@ var graphnodes = {
                 "image":"Urban_Development.png", 
                 "width":"1", 
                 "height":"1"},
-    "Digital connectivity":{
-                "id": "Digital connectivity",
+    "Digital Connectivity":{
+                "id": "Digital Connectivity",
                 "fadeout":"Digital_Connectivity_fadeout.png",
                 "filterwidth":"60px",
                 "filterheight":"50px",
@@ -39,9 +39,9 @@ var graphnodes = {
 
 //data for the stroke color
 var stroke={
-                    1:{"color": "#FCCE75", width: "1.5px", "name":"Agreeing with"}, 
-                    2:{"color": "#D17D91", width: "1.5px", "name":"Conflicting with"}, 
-                    3:{"color": "#6AC2C3", width: "1.5px", "name":"Gaps"} 
+                    1:{"color": "#FCCE75", width: "2.5px", "name":"Agreeing with", isfocusedWidth: 6  }, 
+                    2:{"color": "#D17D91", width: "2.5px", "name":"Conflicting with",isfocusedWidth: 6 }, 
+                    3:{"color": "#6AC2C3", width: "2.5px", "name":"Gaps",isfocusedWidth: 6 } 
                 };
 
 var fadeoutfilter_text = "#C9C9C9";  // when the filter option is not selected

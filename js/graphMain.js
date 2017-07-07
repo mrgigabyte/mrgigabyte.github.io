@@ -85,6 +85,7 @@ $('document').ready(function(){
             var height =  `${graphnodes[type]["filterheight"]}`; //custom height for each filter-icon
             var width  =  `${graphnodes[type]["filterwidth"]}`;  //custom width  for each filter-icon
             var id     =  `${graphnodes[type]["id"]}`;
+            $('#all_nodes').removeClass('isDisabled');
             for(var key in graphnodes){
                 //for unselected filter buttons
                 if(graphnodes[key]["id"] !== id){
@@ -92,6 +93,7 @@ $('document').ready(function(){
                     var newwidth  = `${graphnodes[key]["filterwidth"]}` ;
                     document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`); //setting the filter-icon
                     document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`); //text for the filter
+                    
                     document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`); //adding "All" param in the filters.
                 }
             }   
@@ -223,12 +225,12 @@ $('document').ready(function(){
           .call(cc);
 //          
      // add the text 
-        
-          
-  node.append("text")
-      .attr("dx", 12)
-      .attr("dy", ".35em")
-      .text(function(d) { return d.name });
+//        
+//          
+//  node.append("text")
+//      .attr("dx", 12)
+//      .attr("dy", ".35em")
+//      .text(function(d) { return d.name });
         
 //        if(queue.id===3){
 //      node.append("svg:foreignObject")
@@ -282,13 +284,20 @@ $('document').ready(function(){
         if(queue.id===3){  
             $('svg').dblclick(function(){
                                 if(queue.id===3){
+                                    $('.left-panel-heading').removeClass('isDisabled')
                                     $('.left-panel-content').removeClass('isDisabled')
                                     $('.left-panel-linkdiscpt').addClass('isDisabled')
                                     queue = {}; 
                                     console.log(queue)
                                     $('.right-panel').removeClass('isDisabled')
-                                    render_map(graphData.links);
-                             
+                                    render_map(graphData.links);   
+                                    for(var key in graphnodes){
+                                        var newheight = `${graphnodes[key]["filterheight"]}`;
+                                        var newwidth = `${graphnodes[key]["filterwidth"]}`;
+                                        document.getElementById(graphnodes[key]["id"]).setAttribute("style", `transition: 'background 1s'; background: url('./../Images/${graphnodes[key]["image"]}'); height: ${newheight}; width: ${newwidth};`);
+                                        document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${selectedfilter_text};`);
+                                    }
+                                    $('#all_nodes').addClass('isDisabled');     
                                 }
                             })
         }
@@ -296,6 +305,7 @@ $('document').ready(function(){
         
         // checks for double click
         cc.on('dblclick', function(d) {
+            $('.left-panel-heading').addClass('isDisabled')
             $('.left-panel-content').addClass('isDisabled')
             $('.left-panel-linkdiscpt').removeClass('isDisabled')
             var me  = d3.select(d.srcElement);
@@ -407,9 +417,20 @@ function tick() {
 //                            return `stroke: none;`
 //                        }
 //                  })
+         d3.selectAll('path').transition()
+           .duration(500)
+           .style('stroke-width', function(d){
+                 var x = $('.left-panel-linkdiscpt').text();
+                 if(x===d.desc){
+                        return stroke[d.link].isfocusedWidth;
+                 }
+                 return stroke[d.link].width
+            })
          d3.select(this).transition()
-      .duration(750)
-      .style('stroke-width', 6) 
+           .duration(750)
+           .style('stroke-width', function(d){
+                                         return stroke[d.link].isfocusedWidth
+                                   }) 
 //         
 //                }});
 //        .on("mouseout", function(){if(queue.id===3){
@@ -419,12 +440,12 @@ function tick() {
 //                .attr("height", 20)
 //                .html("")
                 }})
-    .on("mouseout", function(){if(queue.id===3){
-         if(queue.id===3){
-            $('.left-panel-linkdiscpt').html("")
-            d3.select(this).transition()
-      .duration(750)
-      .style('stroke-width', function(d){return stroke[d.link].width}) }}})  
+//    .on("mouseout", function(){if(queue.id===3){
+//         if(queue.id===3){
+//            $('.left-panel-linkdiscpt').html("")
+//            d3.select(this).transition()
+//      .duration(750)
+//      .style('stroke-width', function(d){return stroke[d.link].width}) }}})  
 
     node.attr("transform", function(d) { 
         var width = document.getElementById("graph").offsetWidth, 

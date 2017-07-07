@@ -5,12 +5,12 @@ $( document ).ready(function() {
 
 function addfilter(){
   for(var key in graphnodes){
-      var x = `../../Images/${graphnodes[key]["fadeout"]}`;
+      var x = `../../Images/${graphnodes[key]["image"]}`;
       var height = `${graphnodes[key]["filterheight"]}`;
       var width = `${graphnodes[key]["filterwidth"]}`;
       var id=`${graphnodes[key]["id"]}`;
       $('.filter').append(`<div class="sub-filter filter_by" type="button"  data-filter_by="${key}"><div class='filter-img' style="background: url('${x}'); height: ${height}; width: ${width};" id = '${id}'></div>
-                                <button type="button" class="filter_by" data-filter_by="${key}"  id = '${id}button'>
+                                <button type="button" class="filter_by" data-filter_by="${key}"  id = '${id}button' style="color:${selectedfilter_text}">
                                     ${key}
                                 </button>
                             </div><br/>`);
@@ -19,12 +19,13 @@ function addfilter(){
                                 <button type="button" id="all_nodes">
                                     All
                                 </button>
-                            </div><br/>`);
-    
+                            </div><br/>`)
+    $('#all_nodes').addClass('isDisabled');
+    document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);
 };
 
 function basic(){
-    
+    $('.filter').html("")
     addfilter();
     addlegends();
     $('#all_nodes').click(function(){
@@ -32,12 +33,13 @@ function basic(){
         for(var key in graphnodes){
                 var newheight = `${graphnodes[key]["filterheight"]}`;
                 var newwidth = `${graphnodes[key]["filterwidth"]}`;
-                document.getElementById(graphnodes[key]["id"]).setAttribute("style", `transition: 'background 1s'; background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`);
-                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`);
+                document.getElementById(graphnodes[key]["id"]).setAttribute("style", `transition: 'background 1s'; background: url('./../Images/${graphnodes[key]["image"]}'); height: ${newheight}; width: ${newwidth};`);
+                document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${selectedfilter_text};`);
     }
         
-        
-    document.getElementById('all_nodes').setAttribute("style", `color: ${selectedfilter_text};`);})
+    $('#all_nodes').addClass('isDisabled'); 
+    })
+    
 }
 
 
