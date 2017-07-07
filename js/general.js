@@ -1,4 +1,5 @@
 $( document ).ready(function() {
+    $('.bottom-description').addClass('isDisabled')
     basic();
 });
 

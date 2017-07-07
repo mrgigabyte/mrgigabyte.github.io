@@ -97,6 +97,10 @@ button{
     display: inherit;
 }
 
+.decreaseheight{
+    height: 70%;
+}
+
 .graph{position: absolute;
     width: 80%;
     margin-left: auto;
@@ -198,6 +202,17 @@ button{
 
 .right-panel.isDisabled{
     display:none !important;
+}
+
+.bottom-description{
+    font-family : "contentFont";
+    font-size : 14px;
+    color : #606060;
+    height:50%;
+    top: 100%;
+    position: relative;
+    width:100%;
+
 }
 
 .sub-filter{

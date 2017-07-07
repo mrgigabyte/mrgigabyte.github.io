@@ -59,14 +59,13 @@ $('document').ready(function(){
     // var nodes = {}; // d3.range(links.length).map(function() { return {radius:  nodeRadius }; }); // Do not understand what happens here
 
     function grabNode(id) {
-      return nodesData[id-1];
+      return nodesData[id];
     }
       
     //adding orphan nodes  
     nodesData.filter(function(val) {
             if(links.findIndex(x => x.source == val.id || x.target == val.id)==-1)
-                {
-                
+                {   
                     links.push({"source": val.id, "target": val.id, "link":"orphan"})
                 }
         })
@@ -108,6 +107,7 @@ $('document').ready(function(){
       var filtered_links = links.filter(function(link) {
            if(graphnodes.hasOwnProperty(type)){ // checks if the filter function was called via the filter panel or not
                 if (grabNode(link.source).type === type || grabNode(link.target).type === type ){
+                    console.log(link,type, grabNode(link.source))
                     return link;
                 }
             }
@@ -162,7 +162,7 @@ $('document').ready(function(){
             var force = d3.layout.force()
                           .nodes(d3.values(nodes))
                           .links(links)
-                          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(200)
+                          .size([document.getElementById("graph").offsetWidth, document.getElementById("graph").offsetHeight]).linkDistance(100)
                           .charge(-1000)
                           
                           .on("tick", tick)
@@ -227,10 +227,10 @@ $('document').ready(function(){
      // add the text 
 //        
 //          
-//  node.append("text")
-//      .attr("dx", 12)
-//      .attr("dy", ".35em")
-//      .text(function(d) { return d.name });
+  node.append("text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name });
         
 //        if(queue.id===3){
 //      node.append("svg:foreignObject")
@@ -284,6 +284,8 @@ $('document').ready(function(){
         if(queue.id===3){  
             $('svg').dblclick(function(){
                                 if(queue.id===3){
+                                    $('.graph-content').removeClass('decreaseheight')
+                                    $('.bottom-description').addClass('isDisabled')
                                     $('.left-panel-heading').removeClass('isDisabled')
                                     $('.left-panel-content').removeClass('isDisabled')
                                     $('.left-panel-linkdiscpt').addClass('isDisabled')
@@ -305,11 +307,20 @@ $('document').ready(function(){
         
         // checks for double click
         cc.on('dblclick', function(d) {
+            $('.bottom-description').html("")
+            $('.left-panel-linkdiscpt').html("")
+            $('.graph-content').addClass('decreaseheight')
+            $('.bottom-description').removeClass('isDisabled')
             $('.left-panel-heading').addClass('isDisabled')
             $('.left-panel-content').addClass('isDisabled')
             $('.left-panel-linkdiscpt').removeClass('isDisabled')
             var me  = d3.select(d.srcElement);
             var meNode = me.data()[0].name;
+            console.log(me.data()[0].links)
+            if(me.data()[0].links==="orphan"){
+                console.log('ok')
+                $('.bottom-description').html(`${grabNode(meNode).desc}`)
+            }
             queue.id = 3;
             queue.pnode = parseInt(meNode);
             console.log(queue,queue.pnode)
@@ -371,6 +382,14 @@ function tick() {
             e ;
     })  .on("mouseenter", function(d){if(queue.id===3){
             $('.left-panel-linkdiscpt').html(d.desc)    
+            var x;
+            if(d.target.name === d.source.name){
+                x = `${grabNode(d.target.name).desc}`;
+            }
+            else{
+               x = `${grabNode(d.target.name).desc}<br/><br/>${grabNode(d.source.name).desc}`;
+            }
+            $('.bottom-description').html(x)
 //            var reqddesc = [d.target.name,d.source.name]
 //            node.append("svg:foreignObject")
 //                .attr("width", 250)
@@ -429,6 +448,7 @@ function tick() {
          d3.select(this).transition()
            .duration(750)
            .style('stroke-width', function(d){
+                                        
                                          return stroke[d.link].isfocusedWidth
                                    }) 
 //         
