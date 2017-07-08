@@ -321,7 +321,12 @@ $('document').ready(function(){
 //            $('.left-panel-heading').addClass('isDisabled')
 //            $('.left-panel-content').addClass('isDisabled')
 //            $('.left-panel-linkdiscpt').removeClass('isDisabled')
-            var me  = d3.select(d.srcElement);
+            if (navigator.userAgent.match(/msie/i) || navigator.userAgent.match(/trident/i) ){
+                var me  = d3.select(d.target);
+            }
+            else{    
+                var me  = d3.select(d.target);
+            }
             var meNode = me.data()[0].name;
             console.log(me.data()[0].links)
             if(me.data()[0].links==="orphan"){
