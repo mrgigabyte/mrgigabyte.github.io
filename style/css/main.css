@@ -56,6 +56,16 @@ body{
     padding-right: 6%;
 }
 
+.bottom-description{
+    font-family : "contentFont";
+    font-size : 14px;
+    color : #606060;
+    height:50%;
+    top: 100%;
+    position: relative;
+    width:85%;
+
+}
 
 button{
     padding-bottom:10px;
@@ -167,6 +177,10 @@ button{
     display: none; 
 }
 
+#legendskey::-moz-scrollbar { 
+    display: none; 
+}
+
 .legends-key:after {
     content:"";
     display: inline-block;
@@ -202,17 +216,6 @@ button{
 
 .right-panel.isDisabled{
     display:none !important;
-}
-
-.bottom-description{
-    font-family : "contentFont";
-    font-size : 14px;
-    color : #606060;
-    height:50%;
-    top: 100%;
-    position: relative;
-    width:100%;
-
 }
 
 .sub-filter{

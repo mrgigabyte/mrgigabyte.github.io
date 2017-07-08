@@ -1,12 +1,3 @@
-Array.prototype.clean = function(deleteValue) {
-  for (var i = 0; i < this.length; i++) {
-    if (this[i] == deleteValue) {         
-      this.splice(i, 1);
-      i--;
-    }
-  }
-  return this;
-};
 
 //for checking the number of clicks
 function clickcancel() {
@@ -49,6 +40,8 @@ function clickcancel() {
 
 
 $('document').ready(function(){
+    $('.left-panel-linkdiscpt').fadeOut('slow')
+    $('.bottom-description').fadeOut('slow')
     
   // get the data
   d3.json("../data/graph.json", function(error, graphData) {
@@ -56,8 +49,8 @@ $('document').ready(function(){
     var links = graphData.links;
     var queue = {}; //a queue for making changes in the graph which are exclusively for the 3rd wireframe
     var nodes={};
-    // var nodes = {}; // d3.range(links.length).map(function() { return {radius:  nodeRadius }; }); // Do not understand what happens here
 
+    // getting the data from nodesData by passing the specific id as param
     function grabNode(id) {
       return nodesData[id];
     }
@@ -79,27 +72,27 @@ $('document').ready(function(){
 
         
         
-        // for filter layout
+        // for filter layout (this is triggered only when a specific type is clicked)
         if(graphnodes.hasOwnProperty(type)){
             var height =  `${graphnodes[type]["filterheight"]}`; //custom height for each filter-icon
             var width  =  `${graphnodes[type]["filterwidth"]}`;  //custom width  for each filter-icon
             var id     =  `${graphnodes[type]["id"]}`;
-            $('#all_nodes').removeClass('isDisabled');
+            $('#all_nodes').removeClass('isDisabled');           //adds the All type in the filter layout
             for(var key in graphnodes){
                 //for unselected filter buttons
                 if(graphnodes[key]["id"] !== id){
                     var newheight = `${graphnodes[key]["filterheight"]}`;
                     var newwidth  = `${graphnodes[key]["filterwidth"]}` ;
-                    document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`); //setting the filter-icon
-                    document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`); //text for the filter
+                    document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`); //setting the filter-icon (unselected)
+                    document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`); //text for the filter (unselected)
                     
-                    document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`); //adding "All" param in the filters.
+                    document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`); //setting color for "All" param in the filters.
                 }
             }   
             
             //for the selected filter type
-            document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`);
-            document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`);
+            document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`); // setting the filter-icon (selected)
+            document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`); // text for the filter (selected)
         }
         
         
@@ -135,6 +128,8 @@ $('document').ready(function(){
     }
 
     function render_map(links_input) {
+        $('.left-panel-linkdiscpt').fadeOut('slow')
+        $('.bottom-description').fadeOut('slow')
 
       var links = JSON.parse(JSON.stringify(links_input)); 
 
@@ -149,12 +144,6 @@ $('document').ready(function(){
       console.log(nodes)
     var newnodes = nodes;
         
-        
-    
-      // Adding radius key to nodes
-//      Object.keys(nodes).forEach(function(node) {
-//        nodes[node].radius = nodeRadius;
-//      }) 
         
        //checks if the 3rd wireframe is active
       if(queue.id===3){
@@ -183,7 +172,7 @@ $('document').ready(function(){
       }
       
         
-      d3.select(".graph").html("") //sets the html of as empty  
+      d3.select(".graph").html("") //sets the html of the div as empty  
     
       var svg = d3.select(".graph").append("svg")
                   .attr("width", graphwidth)
@@ -223,21 +212,9 @@ $('document').ready(function(){
         
           .call(force.drag)
           .call(cc);
-//          
-     // add the text 
-//        
-//          
-  node.append("text")   
-
         
-//        if(queue.id===3){
-//      node.append("svg:foreignObject")
-//            .attr("width", 250)
-//            .attr("height", 20)
-//            .html(function(d) { return grabNode(d.name).desc; });
-//        
-//        
-//        }
+      // adds an empty text element for future use       
+      node.append("text")   
     
      
       //    defining a defs container that keeps elements that will be used throughout the code (quite often)
@@ -278,22 +255,19 @@ $('document').ready(function(){
               .attr('r',nodeRadius)
         
         
-        // for clicking in the background of the third wireframe to go back to wireframe1
+        // for clicking in the background of the third wireframe to go back to wireframe-1
         if(queue.id===3){  
             $('svg').dblclick(function(){
                                 if(queue.id===3){
-                                     $('.right-panel').fadeIn('slow');
-                                    $('.graph-content').removeClass('decreaseheight')
-                                    $('.bottom-description').addClass('isDisabled')
-                                    $('.left-panel-content').fadeIn('slow');
+                                    $('.right-panel').fadeIn('slow'); //filter layout is displayed
+                                    $('.graph-content').removeClass('decreaseheight') //the height of the graph div is increased again
+                                    $('.bottom-description').fadeOut('slow')          // description for respective nodes is removed
+                                    $('.left-panel-content').fadeIn('slow');          // left-panel is displayed
                                     $('.left-panel-heading').fadeIn('slow');
-//                                      $('.right-panel').removeClass('isDisabled')
-//                                    $('.left-panel-heading').removeClass('isDisabled')
-//                                    $('.left-panel-content').removeClass('isDisabled')
-                                    $('.left-panel-linkdiscpt').addClass('isDisabled')
-                                    queue = {}; 
-                                    console.log(queue)
-                                  
+                                    $('.left-panel-linkdiscpt').fadeOut('slow')       // link-description on hover is removed
+                                    queue = {};                                       // setting the value of queue as empty since its wireframe-1
+                                    
+                                    //re-rendering the filter layout to default
                                     render_map(graphData.links);   
                                     for(var key in graphnodes){
                                         var newheight = `${graphnodes[key]["filterheight"]}`;
@@ -317,44 +291,25 @@ $('document').ready(function(){
             $('.left-panel-linkdiscpt').html("")
             $('.graph-content').addClass('decreaseheight')
             $('.bottom-description').removeClass('isDisabled')
-//              $('.right-panel').addClass('isDisabled');
-//            $('.left-panel-heading').addClass('isDisabled')
-//            $('.left-panel-content').addClass('isDisabled')
-//            $('.left-panel-linkdiscpt').removeClass('isDisabled')
+            
+            //checking for IE web-browser o.O 
             if (navigator.userAgent.match(/msie/i) || navigator.userAgent.match(/trident/i) ){
-                var me  = d3.select(d.target);
+                var me  = d3.select(d.srcElement);
             }
             else{    
                 var me  = d3.select(d.target);
             }
             var meNode = me.data()[0].name;
-            console.log(me.data()[0].links)
             if(me.data()[0].links==="orphan"){
-                console.log('ok')
                 $('.bottom-description').html(`${grabNode(meNode).desc}`)
             }
             queue.id = 3;
             queue.pnode = parseInt(meNode);
-            console.log(queue,queue.pnode)
-            
             render_map(filter(links, meNode.toString()+"@specific"));
         })
 
         
 function tick() {
-    
-//    if(queue.id === 3){
-//        
-////        if(!nodes[parseInt(queue.pnode)]){
-////            console.log('okay')
-////            var meNode = queue.pnode
-////            nodes = {};
-////            render_map(filter(links, meNode.toString()+"@specific"));
-////        }
-//        console.log(newnodes)
-//        newnodes[parseInt(queue.pnode)].x = document.getElementById("graph").offsetWidth/ 2;
-//        newnodes[parseInt(queue.pnode)].y = document.getElementById("graph").offsetHeight / 2;
-//    }
 
      node.each(collide(0.5))
      path.attr('style',function(d){
@@ -409,55 +364,9 @@ function tick() {
                 $('.bottom-description').html(x);
                 $('.bottom-description').fadeIn('slow');
             })
-//            $('.bottom-description').html(x)
-//            var reqddesc = [d.target.name,d.source.name]
-//            node.append("svg:foreignObject")
-//                .attr("width", 250)
-//                .attr("height", 20)
-//                .html(function(d) {
-//                    for(var m in reqddesc){
-//                        if(d.name===reqddesc[m]){
-//                            return grabNode(d.name).desc;
-//                            
-//                        }
-//                        
-//                    }
-//                
-//                })
-//                d3.selectAll("circle")
-//                  .attr('fill',function(d){ 
-//                        if(reqddesc.indexOf(d.name)!== -1){
-//                            for(var x in nodesData){
-//                                if(nodesData[x].id==parseInt(d.name)){
-//                          
-//                                    for(var key in graphnodes){
-//                          
-//                                            if(nodesData[x].type===key){
-//                                  
-//                                                var m = `url(#${key.replace(/\s+/, "")})`
-//                                                return m;
-//                                            }
-//                          
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        else{
-//                            return `none`;
-//                        }
-//                  })
-//                 d3.selectAll("path")
-//                  .attr('style',function(d){ 
-//                        if(reqddesc.indexOf(d.source.name)!== -1){
-//        
-//                            return `stroke:  ${stroke[d.link]["color"]}; stroke-width:  3px `
-//                            }
-//                        else{
-//                            return `stroke: none;`
-//                        }
-//                  })
+
          d3.selectAll('path').transition()
-           .duration(500)
+           .duration(stroke_duration_out)
            .style('stroke-width', function(d){
                  var x = $('.left-panel-linkdiscpt').text();
                  if(x===d.desc){
@@ -467,8 +376,8 @@ function tick() {
             })
          var reqddesc = [d.target.name,d.source.name]
          d3.selectAll('text')
-             .attr("dx", 12)
-             .attr("dy", ".35em")
+             .attr("dx", x_dist)
+             .attr("dy", y_dist)
              .text(function(d) { 
                  for(var m in reqddesc){
                     if(d.name===reqddesc[m]){
@@ -479,7 +388,7 @@ function tick() {
                   } 
                });
          d3.select(this).transition()
-           .duration(750)
+           .duration(stroke_duration_in)
            .style('stroke-width', function(d){
                                         
                                          return stroke[d.link].isfocusedWidth

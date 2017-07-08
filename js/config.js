@@ -52,3 +52,10 @@ var padding = 4.5;      //sets padding
 var nodeRadius=20;      //sets radius of the circular node
 var linkdistance = 70; //sets linkdistance in between the nodes
 var charge = -250;      //sets the closeness of the different clusters, more negative = less closeness
+
+//setting the position of label around the nodes ( wireframe-3)
+var x_dist = "-12";
+var y_dist = "3.25em";
+
+var stroke_duration_in=750; //the time taken for the selected link to increase the stroke-width to max ( is focused width)
+var stroke_duration_out=500; //the time taken for the link to comeback to normal when focused-out
