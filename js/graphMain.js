@@ -44,7 +44,7 @@ $('document').ready(function(){
     $('.bottom-description').fadeOut('slow')
     
   // get the data
-  d3.json("../data/graph.json", function(error, graphData) {
+  d3.json("../../data/graph.json", function(error, graphData) {
     var nodesData = graphData.nodes;
     var links = graphData.links;
     var queue = {}; //a queue for making changes in the graph which are exclusively for the 3rd wireframe
@@ -83,7 +83,7 @@ $('document').ready(function(){
                 if(graphnodes[key]["id"] !== id){
                     var newheight = `${graphnodes[key]["filterheight"]}`;
                     var newwidth  = `${graphnodes[key]["filterwidth"]}` ;
-                    document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('./../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`); //setting the filter-icon (unselected)
+                    document.getElementById(graphnodes[key]["id"]).setAttribute("style", ` background: url('../../Images/${graphnodes[key]["fadeout"]}'); height: ${newheight}; width: ${newwidth};`); //setting the filter-icon (unselected)
                     document.getElementById(graphnodes[key]["id"]+"button").setAttribute("style", `color: ${fadeoutfilter_text};`); //text for the filter (unselected)
                     
                     document.getElementById('all_nodes').setAttribute("style", `color: ${fadeoutfilter_text};`); //setting color for "All" param in the filters.
@@ -91,7 +91,7 @@ $('document').ready(function(){
             }   
             
             //for the selected filter type
-            document.getElementById(id).setAttribute("style", `background: url('./../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`); // setting the filter-icon (selected)
+            document.getElementById(id).setAttribute("style", `background: url('../../Images/${graphnodes[type]["image"]}'); height: ${height}; width: ${width};`); // setting the filter-icon (selected)
             document.getElementById(id+"button").setAttribute("style", `color: ${selectedfilter_text};`); // text for the filter (selected)
         }
         
