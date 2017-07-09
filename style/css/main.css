@@ -10,7 +10,7 @@
 
 @font-face{
     font-family: "contentFont";
-    src: url("../../font/GillSans.ttc");
+    src: url("../../font/gill-sans-std.otf");
 }
 
 @media only screen and (min-width: 1920px) {
@@ -25,6 +25,19 @@
     }
 }
 
+@media only screen and (min-height: 900px){
+    .left-panel-content{
+        max-height: 54vh;
+    }
+    .left-panel-linkdiscpt{
+         max-height: 54vh;
+    }
+    .bottom-description{
+        max-height: 26vh;
+        
+    }
+}
+
 @media only screen and (max-height: 900px) {
 
 .legends-key{
@@ -32,14 +45,25 @@
     }
 }
 
-@media only screen and (max-height: 800px) {
+@media only screen and (max-height: 850px) {
 
     .logo {
         height: 20% !important;
+        margin-top: -5%;
     }
     .left-panel-top{
         height: 20% !important;
+       
 
+    }
+    
+    .left-panel-linkdiscpt{
+         max-height: 64vh;
+    }
+    
+    .bottom-description{
+            max-height: 29vh;
+            overflow-y: auto;
     }
 
     .container {
@@ -47,6 +71,10 @@
     }
     .graph{
         height:100% !important;
+    }
+    
+    .left-panel-content{
+        max-height: 53vh;
     }
 }
 
@@ -57,6 +85,7 @@ body{
 }
 
 .bottom-description{
+    overflow: hidden;
     font-family : "contentFont";
     font-size : 14px;
     color : #606060;
@@ -64,7 +93,7 @@ body{
     top: 100%;
     position: relative;
     width:80%;
-    left:10%;
+    left:5%;
 
 }
 
@@ -87,6 +116,11 @@ button{
 
 .filter{
     display: block;
+    max-height: 71vh;
+    overflow-y: auto;
+    position: relative;
+    overflow: hidden;
+    
     
 }
 
@@ -137,12 +171,17 @@ button{
 }
 
 .left-panel-content{
+    position: relative;
+    overflow: hidden;
     margin-top:20px;
     font-family : "contentFont";
     font-size : 14px;
     color : #606060;
     margin-bottom: 20%;
+/*    overflow-y: auto;*/
 }
+
+
 
 .isDisabled{
     display: none;
@@ -153,16 +192,19 @@ button{
 }
 
 .left-panel-linkdiscpt{
+    position:relative;
     margin-top:20px;
     font-family : "contentFont";
     font-size : 14px;
     color : #606060;
     margin-bottom: 20%;
+/*    overflow-y: auto;*/
+    overflow: hidden;
 }
 
 .legends{
     height:10%; 
-    padding-top: 10%;
+
 }
 
 .legends-key{
@@ -223,4 +265,28 @@ button{
     
     display: inline-flex;
 }
+
+/*
+::-webkit-scrollbar {
+    width: 14px;
+    height: 18px;
+}
+::-webkit-scrollbar-thumb {
+    height: 6px;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    -webkit-border-radius: 7px;
+    background-color: rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+}
+::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+}
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+*/
+
 

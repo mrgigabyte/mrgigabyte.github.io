@@ -40,8 +40,6 @@ function clickcancel() {
 
 
 $('document').ready(function(){
-    $('.left-panel-linkdiscpt').fadeOut('slow')
-    $('.bottom-description').fadeOut('slow')
     
   // get the data
   d3.json("../../data/graph.json", function(error, graphData) {
@@ -128,7 +126,8 @@ $('document').ready(function(){
     }
 
     function render_map(links_input) {
-        $('.left-panel-linkdiscpt').fadeOut('slow')
+//        Ps.update(container);
+        $('.left-panel-linkdiscpt').fadeOut('fast')
         $('.bottom-description').fadeOut('slow')
 
       var links = JSON.parse(JSON.stringify(links_input)); 

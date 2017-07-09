@@ -1,4 +1,12 @@
 $( document ).ready(function() {
+    var lpc = document.getElementById('left-panel-content');
+    var lpl = document.getElementById('left-panel-linkdiscpt');
+    var bd = document.getElementById('bottom-descript');
+    var fl = document.getElementById('filter-layout');
+    Ps.initialize(lpc);
+    Ps.initialize(lpl);
+    Ps.initialize(bd);
+    Ps.initialize(fl);
     $('.bottom-description').addClass('isDisabled')
     basic();
 });

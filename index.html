@@ -5,6 +5,7 @@
     
     <!--javascript start -->
     <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/perfect-scrollbar.min.js"></script>
     <script src="js/d3.v3.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/general.js"></script>
@@ -14,6 +15,7 @@
     <!--css start-->
     <link href="style/css/main.css" rel="stylesheet"> 
     <link href="style/css/graph.css" rel="stylesheet">
+    <link rel="stylesheet" href="style/css/perfect-scrollbar.min.css" />
     <!--css end-->
     
     <head>
@@ -24,8 +26,11 @@
                 <div class="logo" ></div>
                 <div class="left-panel-text">
                 <div class="left-panel-heading">Coherence Map</div>
-                <div class="left-panel-linkdiscpt"></div>
-                <div class="left-panel-content">Lorem ipsum dolor sit amet, pro civibus appellantur id. Ullum erant ubique pro et. Eros epicuri platonem vix at. Ea mea tempor eripuit legimus. Vix summo adolescens reprehendunt an.<br/><br/>
+                <div class="left-panel-linkdiscpt" id="left-panel-linkdiscpt"></div>
+                <div class="left-panel-content" id="left-panel-content">Lorem ipsum dolor sit amet, pro civibus appellantur id. Ullum erant ubique pro et. Eros epicuri platonem vix at. Ea mea tempor eripuit legimus. Vix summo adolescens reprehendunt an.<br/><br/>
+
+Dicat accusamus ea duo, ea per habeo laudem gloriatur, at doming putent oblique vix. Eirmod accommodare concludaturque eos te. Laoreet rationibus ut ius. Eu porro principes vituperatoribus sit, vel iuvaret tacimates intellegat ad. Est tota bonorum signiferumque in, possim impetus iuvaret vix te. Quo reque nostro comprehensam ut. Eam cu doctus necessitatibus.
+                    Lorem ipsum dolor sit amet, pro civibus appellantur id. Ullum erant ubique pro et. Eros epicuri platonem vix at. Ea mea tempor eripuit legimus. Vix summo adolescens reprehendunt an.<br/><br/>
 
 Dicat accusamus ea duo, ea per habeo laudem gloriatur, at doming putent oblique vix. Eirmod accommodare concludaturque eos te. Laoreet rationibus ut ius. Eu porro principes vituperatoribus sit, vel iuvaret tacimates intellegat ad. Est tota bonorum signiferumque in, possim impetus iuvaret vix te. Quo reque nostro comprehensam ut. Eam cu doctus necessitatibus.
 
@@ -39,7 +44,7 @@ Dicat accusamus ea duo, ea per habeo laudem gloriatur, at doming putent oblique 
             </div>
             <div class="right-panel">
                 <div class="left-panel-top"></div>
-                <div class="filter">
+                <div class="filter" id="filter-layout">
                 </div>
             </div>
         </div>
